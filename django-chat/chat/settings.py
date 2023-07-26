@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,8 +26,10 @@ SECRET_KEY = 'django-insecure-iu*us%)odzclk7i$jqq_2@o^8$=0pn57p)(h-&@vc$*6$azhm4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
+# OpenAI API Key
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 # Application definition
 
