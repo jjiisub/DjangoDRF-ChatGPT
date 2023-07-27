@@ -8,20 +8,32 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import ConversationSerializer
+from .models import ChatingRoom, Message
 
 
 load_dotenv()
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
 
+
+
 class ChatView(APIView):
     def get(self, request, format=None):
         conversations = request.session.get('conversations', [])
+        
+        print('session conv :', conversations)
+        
         serializer = ConversationSerializer(conversations, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        room_name = request.data.get('room')
+        room = ChatingRoom.objects.get(name=room_name)
+
         prompt = request.data.get('prompt')
+
+        new_msg_prom = Message.objects.create(type='prompt', content=prompt, ChatingRoom=room)
+
         if prompt:
             session_conversations = request.session.get('conversations', [])
             previous_conversations = "\n".join([f"User: {c['prompt']}\nAI: {c['response']}" for c in session_conversations])
@@ -37,6 +49,8 @@ class ChatView(APIView):
                 temperature=0.5,
             )
             response = completions.choices[0].text.strip()
+
+            new_msg_res = Message.objects.create(type='response', content=response, ChatingRoom=room)
 
             conversation = {'prompt': prompt, 'response': response}
             session_conversations.append(conversation)
