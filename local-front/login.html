@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>LogIn</title>
+  </head>
+  <body>
+    <a href="./index.html">채팅</a>
+    <h1>로그인 화면입니다</h1>
+    <form id="login-form">
+      <label for="username">사용자 이름:</label>
+      <input type="text" id="username" name="username" required />
+      <br />
+      <label for="password">비밀번호:</label>
+      <input type="password" id="password" name="password" required />
+      <br />
+      <input type="submit" value="로그인" />
+    </form>
+    <div id="response"></div>
+
+    <script>
+      function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(";").shift();
+      }
+      // const csrfToken = getCookie("csrftoken");
+      console.log(getCookie("csrftoken"));
+      const csrfToken = "ni27wbpk9VdqrKbAuH15xWYCVB29byEz";
+
+      document.getElementById("login-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        fetch("http://127.0.0.1:8000/account/login/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken,
+          },
+          body: JSON.stringify({ username: username, password: password }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            alert("로그인 성공. 토큰: " + data.token);
+          })
+          .catch((error) => {
+            alert("로그인 실패: " + error.message);
+          });
+      });
+    </script>
+  </body>
+</html>

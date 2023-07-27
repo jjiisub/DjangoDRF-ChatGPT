@@ -41,6 +41,7 @@ class ChatView(APIView):
             conversation = {'prompt': prompt, 'response': response}
             session_conversations.append(conversation)
             request.session['conversations'] = session_conversations
+            request.session.modified = True
 
         conversations = request.session.get('conversations', [])
         serializer = ConversationSerializer(conversations, many=True)
