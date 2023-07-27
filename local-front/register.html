@@ -34,7 +34,7 @@
             console.log(data);
             if (data.state) {
               alert("회원가입이 완료되었습니다.");
-              window.location.replace("./index.html");
+              window.location.replace("./login.html");
             } else {
               const error_msg = JSON.stringify(data.error);
               alert(error_msg);

@@ -5,16 +5,22 @@
   </head>
   <body>
     <h1>ChatGPT 채팅 화면</h1>
+
+    <a href="./login.html">로그인</a>
+    <a onclick="logout()" href="./index.html">로그아웃</a>
+    <a href="./register.html">회원가입</a>
+
     <div>
       <label for="question">prompt :</label>
       <input type="text" id="question" />
       <button onclick="askQuestion()">전송</button>
     </div>
     <div id="response"></div>
-    <a href="./login.html">로그인</a>
-    <a href="./register.html">회원가입</a>
 
     <script>
+      function logout() {
+        document.cookie = `loginToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+      }
       function askQuestion() {
         const questionInput = document.getElementById("question");
         const question = questionInput.value;
@@ -31,10 +37,9 @@
               // Display AI's response on the page
               const responseDiv = document.getElementById("response");
               responseDiv.innerText += `AI's Response: ${data[0]["response"]}\n`;
-              console.log(data);
-              console.log(data[0]["response"]);
-
-              alert(data[0]["response"]);
+              //   console.log(data);
+              //   console.log(data[0]["response"]);
+              //   alert(data[0]["response"]);
             })
             .catch((error) => {
               console.error("Error:", error);
