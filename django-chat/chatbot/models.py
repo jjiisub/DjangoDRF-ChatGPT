@@ -19,15 +19,13 @@ class ChatingRoom(models.Model):
         return f'{self.user}-{self.name}'
 
 class Message(models.Model):
-    type = models.CharField(max_length=50)
+    prompt = models.TextField()
+    response = models.TextField()
     ChatingRoom = models.ForeignKey(ChatingRoom, on_delete=models.CASCADE)
-    content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    temp1 = models.CharField(max_length=10, null=True, blank=True)
-    temp2 = models.CharField(max_length=10, null=True, blank=True)
 
     def __str__(self) -> str:
-        return f'{self.ChatingRoom}-{self.content}'
+        return f'{self.ChatingRoom}-{self.prompt}-{self.response}'
 
 
 

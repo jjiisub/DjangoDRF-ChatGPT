@@ -9,19 +9,34 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import ConversationSerializer
 from .models import ChatingRoom, Message
+from rest_framework.authtoken.models import Token
 
 
 load_dotenv()
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
-
-
-
 class ChatView(APIView):
     def get(self, request, format=None):
-        conversations = request.session.get('conversations', [])
+        # loginToken = request.data.get('token')
+        # room_name = request.data.get('room')
+        loginToken = request.GET.get('token')
+        room_name = request.GET.get('room')
+
+        print(loginToken)
+        print(room_name)
+
+        token = Token.objects.get(key=loginToken)
+        user = token.user
+
+        room = ChatingRoom.objects.get(name=room_name)
+
+        prev_conversations = Message.objects.filter(ChatingRoom=room).order_by('created_at')
+        if prev_conversations:
+            conversations = []
+            for elem in prev_conversations:
+                conversations.append({'prompt':elem.prompt, 'response':elem.response})
         
-        print('session conv :', conversations)
+        request.session['conversations'] = conversations
         
         serializer = ConversationSerializer(conversations, many=True)
         return Response(serializer.data)
@@ -29,10 +44,7 @@ class ChatView(APIView):
     def post(self, request, format=None):
         room_name = request.data.get('room')
         room = ChatingRoom.objects.get(name=room_name)
-
         prompt = request.data.get('prompt')
-
-        new_msg_prom = Message.objects.create(type='prompt', content=prompt, ChatingRoom=room)
 
         if prompt:
             session_conversations = request.session.get('conversations', [])
@@ -50,7 +62,7 @@ class ChatView(APIView):
             )
             response = completions.choices[0].text.strip()
 
-            new_msg_res = Message.objects.create(type='response', content=response, ChatingRoom=room)
+            msg = Message.objects.create(prompt=prompt, response=response, ChatingRoom=room)
 
             conversation = {'prompt': prompt, 'response': response}
             session_conversations.append(conversation)

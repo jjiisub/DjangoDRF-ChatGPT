@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ChatGPT 채팅</title>
+  </head>
+  <body>
+    <h1>ChatGPT 채팅</h1>
+
+    <a href="./index.html">메인</a>
+    <div>
+      <label for="question">prompt :</label>
+      <input type="text" id="question" />
+      <button onclick="askQuestion()">전송</button>
+    </div>
+    <div id="response"></div>
+  </body>
+  <script>
+    function logout() {
+      document.cookie = `loginToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    }
+
+    function askQuestion() {
+      const questionInput = document.getElementById("question");
+      const question = questionInput.value;
+      if (question) {
+        fetch("http://127.0.0.1:8000/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ prompt: question, room: "test" }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            // Display AI's response on the page
+            const responseDiv = document.getElementById("response");
+            responseDiv.innerText += `AI's Response: ${data[0]["response"]}\n`;
+            //   console.log(data);
+            //   console.log(data[0]["response"]);
+            //   alert(data[0]["response"]);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+    }
+
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(";").shift();
+    }
+    loginToken = getCookie("loginToken");
+    console.log(loginToken);
+    document.addEventListener("DOMContentLoaded", function () {
+      fetch("http://127.0.0.1:8000/?token=" + loginToken + "&room=test", {
+        headers: {
+          //   token: `Bearer ${token}`,
+        },
+      })
+        .then((response) => {
+          console.log(response);
+          return response.json();
+        })
+        .then((data) => {
+          // 요청이 성공적으로 완료된 후에 실행될 코드
+          console.log("서버 응답 데이터:", data);
+        })
+        .catch((error) => {
+          // 요청 중 에러가 발생했을 때 실행될 코드
+          console.error("요청 에러:", error);
+        });
+    });
+  </script>
+  <!-- <script src="./js/main.js"></script> -->
+</html>

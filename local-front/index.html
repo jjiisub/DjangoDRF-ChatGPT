@@ -1,51 +1,63 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>ChatGPT 채팅</title>
+    <title>메인</title>
   </head>
   <body>
-    <h1>ChatGPT 채팅 화면</h1>
+    <h1>메인</h1>
 
     <a href="./login.html">로그인</a>
     <a onclick="logout()" href="./index.html">로그아웃</a>
     <a href="./register.html">회원가입</a>
-
+    <a href="./chat.html">채팅</a>
+    <!-- 
     <div>
       <label for="question">prompt :</label>
       <input type="text" id="question" />
       <button onclick="askQuestion()">전송</button>
     </div>
-    <div id="response"></div>
+    <div id="response"></div> -->
   </body>
   <script>
     function logout() {
       document.cookie = `loginToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
     }
 
-    function askQuestion() {
-      const questionInput = document.getElementById("question");
-      const question = questionInput.value;
-      if (question) {
-        fetch("http://127.0.0.1:8000/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ prompt: question, room: "test" }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            // Display AI's response on the page
-            const responseDiv = document.getElementById("response");
-            responseDiv.innerText += `AI's Response: ${data[0]["response"]}\n`;
-            //   console.log(data);
-            //   console.log(data[0]["response"]);
-            //   alert(data[0]["response"]);
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
-      }
+    // function askQuestion() {
+    //   const questionInput = document.getElementById("question");
+    //   const question = questionInput.value;
+    //   if (question) {
+    //     fetch("http://127.0.0.1:8000/", {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify({ prompt: question, room: "test" }),
+    //     })
+    //       .then((response) => response.json())
+    //       .then((data) => {
+    //         // Display AI's response on the page
+    //         const responseDiv = document.getElementById("response");
+    //         responseDiv.innerText += `AI's Response: ${data[0]["response"]}\n`;
+    //         //   console.log(data);
+    //         //   console.log(data[0]["response"]);
+    //         //   alert(data[0]["response"]);
+    //       })
+    //       .catch((error) => {
+    //         console.error("Error:", error);
+    //       });
+    //   }
+    // }
+
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(";").shift();
+    }
+    loginToken = getCookie("loginToken");
+    if (loginToken) {
+      console.log(loginToken);
+    } else {
     }
   </script>
   <!-- <script src="./js/main.js"></script> -->
