@@ -6,6 +6,11 @@ function setTokenToCookie(token) {
   const cookieString = `loginToken=${token}; path=/;`;
   document.cookie = cookieString;
 }
+function setUserToCookie(username) {
+  const cookieString = `User=${username}; path=/;`;
+  document.cookie = cookieString;
+}
+
 function checkToken() {
   const loginToken = document.cookie.match("(^|;) ?" + "loginToken" + "=([^;]*)(;|$)");
   if (loginToken) {
@@ -37,8 +42,9 @@ document.getElementById("login-form").addEventListener("submit", function (e) {
     .then((response) => response.json())
     .then((data) => {
       if (data.state) {
-        alert("로그인 성공");
+        alert(`로그인 성공 : ${data.username}`);
         setTokenToCookie(data.token);
+        setUserToCookie(data.username);
         window.location.replace("./index.html");
       } else {
         alert(data.message);

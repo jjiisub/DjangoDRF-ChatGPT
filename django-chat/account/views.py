@@ -40,7 +40,7 @@ class UserLoginView(ObtainAuthToken):
 
         if user:
             token = Token.objects.get(user=user)
-            return Response({'state': True, 'token': token.key}, status=status.HTTP_200_OK)
+            return Response({'state': True, 'token': token.key, 'username': user.username}, status=status.HTTP_200_OK)
         else:
             return Response({'state': False, 'message': '유효하지 않은 인증 정보입니다.'}, status=status.HTTP_401_UNAUTHORIZED)
 

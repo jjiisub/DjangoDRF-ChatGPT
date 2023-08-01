@@ -46,7 +46,7 @@ function askQuestion() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ prompt: question, room: "test" }),
+      body: JSON.stringify({ prompt: question, room: "test", token: loginToken }),
     })
       .then((response) => response.json())
       .then((data) => {
