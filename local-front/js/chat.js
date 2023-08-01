@@ -1,3 +1,8 @@
+function switchLoad() {
+  let loaderContainer = document.querySelector(".loader-container");
+  loaderContainer.classList.toggle("show");
+}
+
 function getCookie(name) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -30,6 +35,7 @@ function loadChat() {
 }
 
 function askQuestion() {
+  switchLoad();
   const questionInput = document.getElementById("question");
   const question = questionInput.value;
   questionInput.value = "";
@@ -44,8 +50,8 @@ function askQuestion() {
     })
       .then((response) => response.json())
       .then((data) => {
+        switchLoad();
         makeAIChatBox(data[0]["response"]);
-        // loadChat();
       })
       .catch((error) => {
         console.error("Error:", error);
