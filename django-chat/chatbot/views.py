@@ -22,9 +22,6 @@ class ChatView(APIView):
         loginToken = request.GET.get('token')
         room_name = request.GET.get('room')
 
-        print(loginToken)
-        print(room_name)
-
         token = Token.objects.get(key=loginToken)
         user = token.user
 
