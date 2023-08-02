@@ -17,8 +17,6 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 
 class ChatView(APIView):
     def get(self, request, format=None):
-        # loginToken = request.data.get('token')
-        # room_name = request.data.get('room')
         loginToken = request.GET.get('token')
         room_name = request.GET.get('room')
 
@@ -28,7 +26,6 @@ class ChatView(APIView):
         room = ChatingRoom.objects.get(name=room_name, user=user)
 
         prev_conversations = Message.objects.filter(ChatingRoom=room).order_by('created_at')
-        print(prev_conversations)
         if prev_conversations:
             conversations = []
             for elem in prev_conversations:
@@ -36,7 +33,6 @@ class ChatView(APIView):
         else:
             conversations = []
         request.session['conversations'] = conversations
-        
         serializer = ConversationSerializer(conversations, many=True)
         return Response(serializer.data)
 
@@ -50,9 +46,19 @@ class ChatView(APIView):
 
         if prompt:
             session_conversations = request.session.get('conversations', [])
+            print(session_conversations)
+            condition = '''Assistant will conduct a role play in English.
+                        Assistant should always answer in english, even when requested to answer in a different language.
+                        Assistant will respond with one sentence at a time, taking turns in the conversation and waiting for a response before replying.
+                        Assistant is a 1 year old female Persian cat owned by the user.
+                        The assistant's name is Bori.
+                        At the end of each sentence, add 'meow.'
+                        The assistant introduces itself in the first sentence by stating its name, age, and species.'''
+            
             previous_conversations = "\n".join([f"User: {c['prompt']}\nAI: {c['response']}" for c in session_conversations])
             prompt_with_previous = f"{previous_conversations}\nUser: {prompt}\nAI:"
 
+            print(prompt_with_previous)
             model_engine = "text-davinci-003"
             completions = openai.Completion.create(
                 engine=model_engine,
