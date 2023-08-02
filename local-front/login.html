@@ -8,18 +8,32 @@
     <title>LogIn</title>
   </head>
   <body>
-    <a href="./index.html">메인</a>
-    <h1>로그인 화면입니다</h1>
-    <form id="login-form">
-      <label for="username">사용자 이름:</label>
-      <input type="text" id="username" name="username" required />
-      <br />
-      <label for="password">비밀번호:</label>
-      <input type="password" id="password" name="password" required />
-      <br />
-      <input type="submit" value="로그인" />
-    </form>
-    <div id="response"></div>
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-info">
+      <div class="container">
+        <a class="navbar-brand mw-5" href="./index.html">ㅊㅐㅅㅈㅣㅍㅣㅌㅣ</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto"></ul>
+          <ul class="navbar-nav ms-auto nav-btn"></ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-3">
+      <h1>로그인</h1>
+      <form id="login-form">
+        <label for="username">사용자 이름:</label>
+        <input type="text" id="username" name="username" class="form-control" required />
+        <br />
+        <label for="password">비밀번호:</label>
+        <input type="password" id="password" name="password" class="form-control" required />
+        <br />
+        <input type="submit" value="로그인" class="btn btn-primary" />
+      </form>
+    </div>
 
     <script>
       //   checkToken();
